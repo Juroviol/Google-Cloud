@@ -12,11 +12,13 @@
 * Google Cloud SDK
 * Aplicação construída
 
-### Procedimento
- 
-Após realizar o build da aplicação Angular o qual irá gerar um diretório de saída com todos os fontes transpilados de Typescript para Javascript, vamos criar um arquivo chamado app.yaml o qual irá descrever para o Google Cloud SDK as configurações de implantação.
+### Procedimentos
 
-Criando o arquivo `app.yaml`: 
+#### app.yaml
+ 
+Após realizar o build da aplicação Angular o qual irá gerar um diretório de saída com todos os fontes transpilados de Typescript para Javascript, vamos criar um arquivo chamado `app.yaml` o qual irá descrever para o Google Cloud SDK as configurações de implantação da nossa aplicação.
+
+O arquivo `app.yaml`: 
 
 ```
 runtime: python27
@@ -59,6 +61,32 @@ handlers:
     static_files: dist/index.html
     upload: dist/.*
 ```
+
+Como pode ser visto, a maior parte das configurações, referem-se a rotas. Isso porque como a nossa aplicação é uma SPA (Single Page Application), é preciso que todos os caminhos de rotas sejam direcionados para o arquivo index.html, com exceção dos arquivos estáticos.
+
+Não menos importante, o arquivo `app.yaml` também irá implantar nossa aplicação como se fosse uma aplicação em Python. Contudo, isso é somente um artificio para que nossa aplicação execute no App Engine com o menor custo possível e entregue os arquivos estáticos. Não obstante, nossa aplicação não oferece nenhum código fonte em Python.
+
+Outro ponto importante ressaltar é a configuração `service`. Como provavelmente nosso projeto no Google Cloud Platform já possua, ou vai possuir, um serviço backend executando no App Engine denominado `default`, especificamos no arquivo `app.yaml` o valor `front`, dessa forma teremos um serviço no App Engine denominado `front` executando simultâneamente a outros serviços. Isso é importante para depois conseguirmos utilizar o mesmo domínio gerado pelo Google para redirecionar requisições para diferentes serviços dependendo de caminhos de URL. Essa configuração pode ser feita através de um arquivo de roteamento denominado `dispatch`.
+
+#### Deploy
+
+Criar um diretório qualquer e dentro deste diretório colocar o diretório de saída do processo de build de nossa aplicação Angular e o arquivos `app.yaml`. 
+
+Abaixo uma representação de como ficará:
+
+```
+new_directory
+  app.yaml
+  dist
+```
+
+Dentro do diretório `new_directory`, no caso, executar o comando:
+
+```
+gcloud app deploy --version 1
+```
+
+Isso irá realizar a implantação no App Engine na nossa aplicação, e no final do processo será disponibilizado a URL para acesso da mesma.
 
 ## Google App Engine com Dockerfile
 
