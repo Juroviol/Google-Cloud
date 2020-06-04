@@ -1,8 +1,11 @@
 # Google Cloud
 
-- [Deploy de aplicação Angular no Google App Engine](#deploy-de-aplicação-angular-no-google-app-engine)
-  - [Pré-requisitos](#pré-requisitos)
-- [Google App Engine com Dockerfile](#google-app-engine-com-dockerfile)
+- [App Engine](#app-engine)
+  - [Deploy de aplicação Angular no Google App Engine](#deploy-de-aplicação-angular-no-google-app-engine)
+    - [Pré-requisitos](#pré-requisitos)
+    - [Procedimentos](#procedimentos)
+  - [Redirecionamento entre serviços](#redirecionamento-entre-serviços)
+  - [Google App Engine com Dockerfile](#google-app-engine-com-dockerfile)
 
 
 ## Deploy de aplicação Angular no Google App Engine
@@ -14,7 +17,7 @@
 
 ### Procedimentos
 
-#### app.yaml
+#### Criando arquivo de implantação
  
 Após realizar o build da aplicação Angular o qual irá gerar um diretório de saída com todos os fontes transpilados de Typescript para Javascript, vamos criar um arquivo chamado `app.yaml` o qual irá descrever para o Google Cloud SDK as configurações de implantação da nossa aplicação.
 
@@ -66,7 +69,7 @@ Como pode ser visto, a maior parte das configurações, referem-se a rotas. Isso
 
 Não menos importante, o arquivo `app.yaml` também irá implantar nossa aplicação como se fosse uma aplicação em Python. Contudo, isso é somente um artificio para que nossa aplicação execute no App Engine com o menor custo possível e entregue os arquivos estáticos. Não obstante, nossa aplicação não oferece nenhum código fonte em Python.
 
-Outro ponto importante ressaltar é a configuração `service`. Como provavelmente nosso projeto no Google Cloud Platform já possua, ou vai possuir, um serviço backend executando no App Engine denominado `default`, especificamos no arquivo `app.yaml` o valor `front`, dessa forma teremos um serviço no App Engine denominado `front` executando simultâneamente a outros serviços. Isso é importante para depois conseguirmos utilizar o mesmo domínio gerado pelo Google para redirecionar requisições para diferentes serviços dependendo de caminhos de URL. Essa configuração pode ser feita através de um arquivo de roteamento denominado `dispatch`.
+Outro ponto importante ressaltar é a configuração `service`. Como provavelmente nosso projeto no Google Cloud Platform já possua, ou vai possuir, um serviço backend executando no App Engine, especificamos no arquivo `app.yaml` o valor `front`. Dessa forma teremos um serviço no App Engine denominado `front` executando simultâneamente a outros serviços sem impactá-los. Isso é importante para depois conseguirmos utilizar o mesmo domínio gerado pelo Google para redirecionar requisições para diferentes serviços, dependendo de caminhos de URL. Essa configuração é explicada em [Redirecionamento entre serviços](#redirecionamento-entre-serviços).
 
 #### Deploy
 
@@ -87,6 +90,8 @@ gcloud app deploy --version 1
 ```
 
 Isso irá realizar a implantação no App Engine na nossa aplicação, e no final do processo será disponibilizado a URL para acesso da mesma.
+
+## Redirecionamento entre serviços
 
 ## Google App Engine com Dockerfile
 
