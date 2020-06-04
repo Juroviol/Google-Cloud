@@ -93,6 +93,12 @@ Isso irá realizar a implantação no App Engine na nossa aplicação, e no fina
 
 ## Redirecionamento entre serviços
 
+No App Engine podemos ter em um mesmo projeto Google Cloud, diversos serviços executando simultâneamente. Isso nos permite modularizar nossas soluções sem a necessidade de separá-las entre diferentes projetos Google Cloud e sem termos a necessidade de criar uma única solução monolítica. Outra vantagem é que podemos ter configurações de infraestrutura diferentes entre serviços. Por exemplo: o serviço A pode ser muito mais utilizado que o serviço B. Portanto é lógico que o serviço A possua uma configuração de instância de máquina mais potente que o serviço B.
+
+Independente da quantidade de serviços que possam estar executando no App Engine, sempre deverá existir um serviço denominado `default`. Geralmente o serviço `default` é o serviço principal, o core de nossa solução. É comum que este serviço seja o backend principal de uma solução.
+
+Cada serviço executando é acessado através de um subdomínio do domínio principal, ou seja, uma variante do domínio disponibilizado pelo serviço `default`. Portanto imaginemos o seguinte cenário: Um serviço backend denominado `default` e um serviço frontend denominado `front`. No processo de implantação de cada um desses serviços será informado a URL de acesso ao mesmo. Por exemplo: se ID do projeto for oceanic-toolbox-1234, nosso serviço `default` será acessado pela URL https://oceanic-toolbox-1234.appspot.com.br, e o serviço `front` pela URL https://front-dot-oceanic-toolbox-1234.appspot.com. Paralelamente a isto possuímos um domínio personalizado, a saber: meudominiopersonalizado.com.br.
+
 ## Google App Engine com Dockerfile
 
 Neste link https://cloud.google.com/appengine/docs/flexible/custom-runtimes/quickstart contem um guia para realizar deploy no Google App Engine através de um arquivo Dockerfile. Com isto podemos usufruir do serviço do Google App Engine para realizar o deploy de uma imagem qualquer do Docker contendo uma tecnologia qualquer que não é possivel nativamente ao serviço. Isso é bom porque o Google App Engine é muito mais simples de se gerenciar do que o Google Compute Engine que trabalha com clusters e nós/nodos dificultando a sua manutenção.
