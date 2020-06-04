@@ -101,6 +101,18 @@ Cada serviço executando é acessado através de um subdomínio do domínio prin
 
 Portanto imaginemos o seguinte cenário: Um serviço backend denominado `default` e um serviço frontend denominado `front`. No processo de implantação de cada um desses serviços será informado a URL de acesso ao mesmo. Por exemplo: se ID do projeto for oceanic-toolbox-1234, nosso serviço `default` será acessado pela URL https://oceanic-toolbox-1234.appspot.com.br, e o serviço `front` pela URL https://front-dot-oceanic-toolbox-1234.appspot.com.br. Paralelamente a isto, digamos que possuímos um domínio personalizado, a saber: meudominiopersonalizado.com.br, e que este domínio personalizado já esteja validado e vinculado ao nosso projeto Google Cloud. Como poderíamos especificar ao App Engine que toda requisição https://meudominiopersonalizado.com.br seja redirecionado para o serviço `front` e que toda requisição https://meudominiopersonalizado.com.br/api/* seja redirecionado para o serviço `default`? Para isso precisaremos informar estas regras ao App Engine através da configuração de um arquivo denominado [dispatch.yaml](https://cloud.google.com/appengine/docs/standard/java/reference/dispatch-yaml?hl=pt-br#maven).
 
+Abaixo a configuração do arquivo dispatch.yaml para o cenário proposto acima:
+
+```
+dispatch:
+  - url: "*/*"
+    service: front
+
+  - url: "*/api/*"
+    service: default
+```
+
+Isso fará com que toda requisição ao domínio https://oceanic-toolbox-1234.appspot.com que não possua o caminho /api/ seja redirecionado para o serviço `front` e toda requisição de caminho /api/ seja redirecionado para o serviço `default`.
 
 ## Google App Engine com Dockerfile
 
